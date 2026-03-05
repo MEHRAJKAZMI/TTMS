@@ -10,7 +10,14 @@ class EnsureRole
 {
     public function handle(Request $request, Closure $next, string ...$roles): Response
     {
-        if (! $request->user() || ! $request->user()->hasAnyRole($roles)) {
+        $normalizedRoles = collect($roles)
+            ->flatMap(fn (string $role): array => preg_split('/[|,]/', $role) ?: [])
+            ->map(fn (string $role): string => trim($role))
+            ->filter()
+            ->values()
+            ->all();
+
+        if (! $request->user() || ! $request->user()->hasAnyRole($normalizedRoles)) {
             abort(403, 'Unauthorized role.');
         }
 

@@ -21,8 +21,12 @@
         <div class="sidebar">
             <nav class="mt-2">
                 <ul class="nav nav-pills nav-sidebar flex-column">
-                    <li class="nav-item"><a href="{{ route('admin.dashboard') }}" class="nav-link">Dashboard</a></li>
-                    <li class="nav-item"><a href="{{ route('admin.classes.index') }}" class="nav-link">Classes</a></li>
+                    @auth
+                        @if(auth()->user()->hasRole('admin'))
+                            <li class="nav-item"><a href="{{ route('admin.dashboard') }}" class="nav-link">Dashboard</a></li>
+                            <li class="nav-item"><a href="{{ route('admin.classes.index') }}" class="nav-link">Classes</a></li>
+                        @endif
+                    @endauth
                 </ul>
             </nav>
         </div>
